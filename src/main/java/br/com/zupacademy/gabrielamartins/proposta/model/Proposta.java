@@ -1,5 +1,7 @@
 package br.com.zupacademy.gabrielamartins.proposta.model;
 
+import br.com.zupacademy.gabrielamartins.proposta.repository.PropostaRepository;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,8 +22,7 @@ public class Proposta {
     @NotBlank
     @Email
     private String email;
-
-
+    @NotBlank
     private String documento;
     @NotNull
     @Positive
@@ -43,5 +44,9 @@ public class Proposta {
 
     public Long getId() {
         return id;
+    }
+
+    public boolean existeProposta(PropostaRepository propostaRepository) {
+        return propostaRepository.findByDocumento(this.documento).isPresent();
     }
 }
