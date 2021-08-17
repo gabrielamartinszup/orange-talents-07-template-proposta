@@ -1,8 +1,13 @@
-package br.com.zupacademy.gabrielamartins.proposta;
+package br.com.zupacademy.gabrielamartins.proposta.controller;
 
 import br.com.zupacademy.gabrielamartins.proposta.model.Proposta;
+import br.com.zupacademy.gabrielamartins.proposta.model.ResultadoSolicitacao;
 import br.com.zupacademy.gabrielamartins.proposta.repository.PropostaRepository;
+import br.com.zupacademy.gabrielamartins.proposta.requestDto.AnaliseFinanceiraRequestDto;
 import br.com.zupacademy.gabrielamartins.proposta.requestDto.PropostaRequestDto;
+import br.com.zupacademy.gabrielamartins.proposta.responseDto.AnaliseFinanceiraResponseDto;
+import br.com.zupacademy.gabrielamartins.proposta.service.AnaliseFinanceira;
+import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +25,11 @@ public class PropostaController {
     @Autowired
     private PropostaRepository propostaRepository;
 
+    @Autowired
+    private AnaliseFinanceira analiseFinanceira;
+
+
+
     @PostMapping
     @Transactional
     public ResponseEntity<?> criarProposta(@Valid @RequestBody PropostaRequestDto requestDto, UriComponentsBuilder componentsBuilder){
@@ -32,7 +42,10 @@ public class PropostaController {
                 .build();
         }
 
+
         propostaRepository.save(proposta);
+        resultadoSolicitacaoAnaliseFinanceira(proposta);
+
 
         URI uri = componentsBuilder
                 .path("/propostas/{id}")
@@ -43,5 +56,19 @@ public class PropostaController {
 
 
 
+    }
+
+    private void resultadoSolicitacaoAnaliseFinanceira(Proposta proposta) {
+        AnaliseFinanceiraRequestDto requestDto = new AnaliseFinanceiraRequestDto(proposta);
+        ResultadoSolicitacao resultadoSolicitacao;
+        try{
+            AnaliseFinanceiraResponseDto responseDto = analiseFinanceira.analisar(requestDto);
+            resultadoSolicitacao = responseDto.getResultadoSolicitacao();
+            proposta.setEstadoProposta(resultadoSolicitacao.elegibilidade());
+
+        } catch (FeignException fe) {
+            resultadoSolicitacao = ResultadoSolicitacao.COM_RESTRICAO;
+            proposta.setEstadoProposta(resultadoSolicitacao.elegibilidade());
+        }
     }
 }

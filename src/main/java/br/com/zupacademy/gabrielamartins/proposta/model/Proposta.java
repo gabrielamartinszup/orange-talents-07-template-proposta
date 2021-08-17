@@ -2,10 +2,7 @@ package br.com.zupacademy.gabrielamartins.proposta.model;
 
 import br.com.zupacademy.gabrielamartins.proposta.repository.PropostaRepository;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -29,6 +26,8 @@ public class Proposta {
     private Double salario;
     @NotBlank
     private String endereco;
+    @Enumerated(EnumType.STRING)
+    private EstadoProposta estadoProposta;
 
     @Deprecated
     public Proposta() {
@@ -48,5 +47,35 @@ public class Proposta {
 
     public boolean existeProposta(PropostaRepository propostaRepository) {
         return propostaRepository.findByDocumento(this.documento).isPresent();
+    }
+
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getDocumento() {
+        return documento;
+    }
+
+    public Double getSalario() {
+        return salario;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public EstadoProposta getEstadoProposta() {
+        return estadoProposta;
+    }
+
+
+    public void setEstadoProposta(EstadoProposta estadoProposta) {
+        this.estadoProposta = estadoProposta;
     }
 }
