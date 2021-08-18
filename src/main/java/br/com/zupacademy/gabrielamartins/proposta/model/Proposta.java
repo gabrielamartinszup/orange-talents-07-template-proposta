@@ -29,6 +29,9 @@ public class Proposta {
     @Enumerated(EnumType.STRING)
     private EstadoProposta estadoProposta;
 
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Cartao cartao;
+
     @Deprecated
     public Proposta() {
     }
@@ -78,4 +81,9 @@ public class Proposta {
     public void setEstadoProposta(EstadoProposta estadoProposta) {
         this.estadoProposta = estadoProposta;
     }
+
+    public void associaCartao(Cartao cartao) {
+        this.cartao = cartao;
+    }
+
 }
