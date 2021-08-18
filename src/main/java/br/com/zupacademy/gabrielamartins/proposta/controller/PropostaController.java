@@ -6,6 +6,8 @@ import br.com.zupacademy.gabrielamartins.proposta.repository.PropostaRepository;
 import br.com.zupacademy.gabrielamartins.proposta.requestDto.AnaliseFinanceiraRequestDto;
 import br.com.zupacademy.gabrielamartins.proposta.requestDto.PropostaRequestDto;
 import br.com.zupacademy.gabrielamartins.proposta.responseDto.AnaliseFinanceiraResponseDto;
+import br.com.zupacademy.gabrielamartins.proposta.responseDto.ParcelaResponseDto;
+import br.com.zupacademy.gabrielamartins.proposta.responseDto.PropostaResponseDto;
 import br.com.zupacademy.gabrielamartins.proposta.service.AnaliseFinanceira;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +16,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/propostas")
@@ -57,6 +61,22 @@ public class PropostaController {
 
 
     }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PropostaResponseDto> listarPorId(@PathVariable Long id){
+
+        Optional<Proposta> propostaObject = propostaRepository.findById(id);
+        if(propostaObject.isPresent()){
+            Proposta proposta = propostaObject.get();
+            return ResponseEntity.ok(new PropostaResponseDto(proposta));
+        }
+
+        return ResponseEntity.notFound().build();
+
+    }
+
+
 
     private void resultadoSolicitacaoAnaliseFinanceira(Proposta proposta) {
         AnaliseFinanceiraRequestDto requestDto = new AnaliseFinanceiraRequestDto(proposta);
