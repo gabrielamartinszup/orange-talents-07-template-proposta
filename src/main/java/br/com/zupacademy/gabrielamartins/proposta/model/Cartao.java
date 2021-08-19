@@ -85,4 +85,8 @@ public class Cartao {
         return this.numeroCartao;
     }
 
+
+    public Long getId() {
+        return id;
+    }
 }
