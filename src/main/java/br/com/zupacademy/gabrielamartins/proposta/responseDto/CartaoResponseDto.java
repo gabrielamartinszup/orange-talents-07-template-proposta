@@ -13,20 +13,18 @@ public class CartaoResponseDto {
     private String idProposta;
     private BigDecimal limite;
     private LocalDateTime emitidoEm;
-    private Set<BloqueioResponse> bloqueios;
     private Set<AvisoResponse> avisos;
     private Set<CarteiraResponseDto> carteiras;
     private Set<ParcelaResponseDto> parcelas;
     private RenegociacaoResponseDto renegociacao;
     private VencimentoResponseDto vencimento;
 
-    public CartaoResponseDto(String id, String titular, String idProposta, BigDecimal limite, Set<BloqueioResponse> bloqueios, Set<AvisoResponse> avisos,
+    public CartaoResponseDto(String id, String titular, String idProposta, BigDecimal limite, Set<AvisoResponse> avisos,
                                      Set<CarteiraResponseDto> carteiras, Set<ParcelaResponseDto> parcelas, RenegociacaoResponseDto renegociacao, VencimentoResponseDto vencimento, LocalDateTime emitidoEm) {
         this.id = id;
         this.titular = titular;
         this.idProposta = idProposta;
         this.limite = limite;
-        this.bloqueios = bloqueios;
         this.avisos = avisos;
         this.carteiras = carteiras;
         this.parcelas = parcelas;
@@ -55,9 +53,6 @@ public class CartaoResponseDto {
         return emitidoEm;
     }
 
-    public Set<BloqueioResponse> getBloqueios() {
-        return bloqueios;
-    }
 
     public Set<AvisoResponse> getAvisos() {
         return avisos;

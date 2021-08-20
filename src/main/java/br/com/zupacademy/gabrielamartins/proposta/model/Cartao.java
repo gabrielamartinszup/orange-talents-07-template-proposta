@@ -24,7 +24,7 @@ public class Cartao {
     private BigDecimal limite;
     private LocalDateTime emitidoEm;
 
-    @OneToMany(mappedBy = "cartao", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "cartao")
     private Set<Bloqueio> bloqueios;
 
     @OneToMany(mappedBy = "cartao", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -42,6 +42,9 @@ public class Cartao {
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Vencimento vencimento;
 
+    @Enumerated(EnumType.STRING)
+    private StatusCartao statusCartao;
+
     private String idProposta;
 
     @Deprecated
@@ -49,14 +52,12 @@ public class Cartao {
     }
 
     public Cartao(CartaoResponseDto response) {
+        this.statusCartao = StatusCartao.ATIVO;
         this.numeroCartao = response.getId();
         this.nomeTitular = response.getTitular();
         this.limite = response.getLimite();
         this.emitidoEm = response.getEmitidoEm();
 
-        if (!response.getBloqueios().isEmpty()) {
-            this.bloqueios = response.getBloqueios().stream().map(Bloqueio::new).collect(Collectors.toSet());
-        }
 
         if (!response.getAvisos().isEmpty()) {
             this.avisos = response.getAvisos().stream().map(Aviso::new).collect(Collectors.toSet());
@@ -88,5 +89,9 @@ public class Cartao {
 
     public Long getId() {
         return id;
+    }
+
+    public void setStatusCartao(StatusCartao statusCartao) {
+        this.statusCartao = statusCartao;
     }
 }
