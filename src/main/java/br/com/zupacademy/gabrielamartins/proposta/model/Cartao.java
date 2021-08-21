@@ -2,12 +2,10 @@ package br.com.zupacademy.gabrielamartins.proposta.model;
 
 
 import br.com.zupacademy.gabrielamartins.proposta.responseDto.CartaoResponseDto;
-import com.fasterxml.jackson.annotation.JsonCreator;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,7 +26,7 @@ public class Cartao {
     private Set<Bloqueio> bloqueios;
 
     @OneToMany(mappedBy = "cartao", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Set<Aviso> avisos;
+    private Set<AvisoViagem> avisosViagem;
 
     @OneToMany(mappedBy = "cartao", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Carteira> carteiras;
@@ -59,9 +57,6 @@ public class Cartao {
         this.emitidoEm = response.getEmitidoEm();
 
 
-        if (!response.getAvisos().isEmpty()) {
-            this.avisos = response.getAvisos().stream().map(Aviso::new).collect(Collectors.toSet());
-        }
 
         if (!response.getCarteiras().isEmpty()) {
             this.carteiras = response.getCarteiras().stream().map(Carteira::new).collect(Collectors.toSet());
