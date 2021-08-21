@@ -94,4 +94,9 @@ public class Cartao {
     public void setStatusCartao(StatusCartao statusCartao) {
         this.statusCartao = statusCartao;
     }
+
+
+    public boolean isCartaoBloqueado() {
+        return this.statusCartao.equals(StatusCartao.BLOQUEADO);
+    }
 }

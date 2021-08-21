@@ -1,34 +1,29 @@
 package br.com.zupacademy.gabrielamartins.proposta.responseDto;
 
+import br.com.zupacademy.gabrielamartins.proposta.model.Bloqueio;
+import br.com.zupacademy.gabrielamartins.proposta.model.Cartao;
+import com.fasterxml.jackson.annotation.JsonCreator;
+
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 
 public class BloqueioResponse {
 
-    private String id;
-    private LocalDateTime bloqueadoEm;
-    private String sistemaResponsavel;
-    private boolean ativo;
+    private String resultado;
 
-    public BloqueioResponse(String id, LocalDateTime bloqueadoEm, String sistemaResponsavel, boolean ativo) {
-        this.id = id;
-        this.bloqueadoEm = bloqueadoEm;
-        this.sistemaResponsavel = sistemaResponsavel;
-        this.ativo = ativo;
+    @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+    public BloqueioResponse(String resultado) {
+        this.resultado = resultado;
     }
 
-    public String getId() {
-        return id;
+    public String getResultado() {
+        return resultado;
     }
 
-    public LocalDateTime getBloqueadoEm() {
-        return bloqueadoEm;
-    }
+    public Bloqueio converteParaBloqueio(HttpServletRequest request, Cartao cartao){
+        String ip = request.getRemoteAddr();
+        String userAgent = request.getHeader("User-Agent");
 
-    public String getSistemaResponsavel() {
-        return sistemaResponsavel;
-    }
-
-    public boolean isAtivo() {
-        return ativo;
+        return new Bloqueio(ip, userAgent, cartao);
     }
 }

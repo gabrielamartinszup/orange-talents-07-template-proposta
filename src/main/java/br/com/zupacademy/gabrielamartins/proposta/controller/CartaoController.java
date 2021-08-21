@@ -8,8 +8,13 @@ import br.com.zupacademy.gabrielamartins.proposta.repository.BiometriaRepository
 import br.com.zupacademy.gabrielamartins.proposta.repository.BloqueioRepository;
 import br.com.zupacademy.gabrielamartins.proposta.repository.CartaoRepository;
 import br.com.zupacademy.gabrielamartins.proposta.requestDto.BiometriaRequest;
+import br.com.zupacademy.gabrielamartins.proposta.requestDto.BloqueioRequest;
+import br.com.zupacademy.gabrielamartins.proposta.responseDto.BloqueioResponse;
+import br.com.zupacademy.gabrielamartins.proposta.service.ServicoCartao;
+import br.com.zupacademy.gabrielamartins.proposta.service.ServicoCartaoSchedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -32,6 +37,13 @@ public class CartaoController {
     @Autowired
     private BloqueioRepository bloqueioRepository;
 
+    @Autowired
+    private ServicoCartao servicoCartao;
+
+    @Autowired
+    private ServicoCartaoSchedule servicoCartaoSchedule;
+
+
     @PostMapping("/{id}/biometria")
     public ResponseEntity<?> cadastrarBiometria(@PathVariable Long id, @RequestBody @Valid BiometriaRequest biometriaRequest, UriComponentsBuilder builder){
 
@@ -53,28 +65,25 @@ public class CartaoController {
 
 
 
-    @PostMapping("/{idCartao}")
-    public ResponseEntity<?> bloquearCartao(@PathVariable Long idCartao, @RequestHeader(value = "User-Agent") String userAgent,
+    @PostMapping("/{id}/bloqueio")
+    public ResponseEntity<?> bloquearCartao(@PathVariable Long id, @RequestHeader(value = "User-Agent") String userAgent,
                                                @RequestHeader(value = "ip") String ip) {
 
-
-        Optional<Cartao> cartaoObject = cartaoRepository.findById(idCartao);
+        Optional<Cartao> cartaoObject = cartaoRepository.findById(id);
         if (cartaoObject.isPresent()) {
-
             if (Objects.isNull(userAgent)) return ResponseEntity.badRequest().build();
-
             if (Objects.isNull(ip)) return ResponseEntity.badRequest().build();
-
-            Optional<Bloqueio> bloqueioObject = bloqueioRepository.findByCartaoId(idCartao);
-            if(bloqueioObject.isPresent()) return ResponseEntity.unprocessableEntity().build();
+            Optional<Bloqueio> possivelBloqueio = bloqueioRepository.findByCartaoId(id);
+            if(possivelBloqueio.isPresent()) return ResponseEntity.unprocessableEntity().build();
 
             Cartao cartao = cartaoObject.get();
-            cartao.setStatusCartao(StatusCartao.BLOQUEADO);
-            Bloqueio bloqueio = new Bloqueio(ip, userAgent, cartao);
-            bloqueioRepository.save(bloqueio);
+            servicoCartaoSchedule.bloquearCartao(cartao, ip, userAgent);
+
+            if (!cartao.isCartaoBloqueado()) return ResponseEntity.badRequest().build();
 
             return ResponseEntity.ok().build();
         }
+
 
         return ResponseEntity.notFound().build();
     }
