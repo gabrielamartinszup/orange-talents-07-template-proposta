@@ -1,7 +1,5 @@
 package br.com.zupacademy.gabrielamartins.proposta.responseDto;
 
-import br.com.zupacademy.gabrielamartins.proposta.model.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -13,13 +11,13 @@ public class CartaoResponseDto {
     private String idProposta;
     private BigDecimal limite;
     private LocalDateTime emitidoEm;
-    private Set<AvisoResponse> avisos;
+    private Set<AvisoViagemResponseDto> avisos;
     private Set<CarteiraResponseDto> carteiras;
     private Set<ParcelaResponseDto> parcelas;
     private RenegociacaoResponseDto renegociacao;
     private VencimentoResponseDto vencimento;
 
-    public CartaoResponseDto(String id, String titular, String idProposta, BigDecimal limite, Set<AvisoResponse> avisos,
+    public CartaoResponseDto(String id, String titular, String idProposta, BigDecimal limite, Set<AvisoViagemResponseDto> avisos,
                                      Set<CarteiraResponseDto> carteiras, Set<ParcelaResponseDto> parcelas, RenegociacaoResponseDto renegociacao, VencimentoResponseDto vencimento, LocalDateTime emitidoEm) {
         this.id = id;
         this.titular = titular;
@@ -54,7 +52,7 @@ public class CartaoResponseDto {
     }
 
 
-    public Set<AvisoResponse> getAvisos() {
+    public Set<AvisoViagemResponseDto> getAvisos() {
         return avisos;
     }
 

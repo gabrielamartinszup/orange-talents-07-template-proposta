@@ -1,6 +1,7 @@
 package br.com.zupacademy.gabrielamartins.proposta.service;
 
 import br.com.zupacademy.gabrielamartins.proposta.model.*;
+import br.com.zupacademy.gabrielamartins.proposta.repository.AvisoViagemRepository;
 import br.com.zupacademy.gabrielamartins.proposta.repository.BloqueioRepository;
 import br.com.zupacademy.gabrielamartins.proposta.repository.PropostaRepository;
 import br.com.zupacademy.gabrielamartins.proposta.requestDto.BloqueioRequest;
@@ -13,7 +14,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Properties;
+
 
 @Service
 @EnableScheduling
@@ -31,16 +32,19 @@ public class ServicoCartaoSchedule {
     @Autowired
     private BloqueioRepository bloqueioRepository;
 
+    @Autowired
+    private AvisoViagemRepository avisoViagemRepository;
+
     @Scheduled(fixedDelay = delay)
-    public void vincularCartaoProposta(){
+    public void vincularCartaoProposta() {
 
         List<Proposta> propostas = propostaRepository.findAllByEstadoPropostaAndCartao(EstadoProposta.ELEGIVEL, null);
-        propostas.forEach(proposta ->{
-            try{
+        propostas.forEach(proposta -> {
+            try {
                 CartaoResponseDto responseDto = servicoCartao.gerarCartao(proposta.getId().toString());
                 proposta.associaCartao(new Cartao(responseDto));
                 propostaRepository.save(proposta);
-            } catch (FeignException e){
+            } catch (FeignException e) {
                 e.getMessage();
             }
         });
@@ -50,11 +54,13 @@ public class ServicoCartaoSchedule {
     public void bloquearCartao(Cartao cartao, String ip, String userAgent) {
 
 
-            BloqueioResponse res = servicoCartao.bloquearCartao(cartao.getNumeroCartao(), new BloqueioRequest("propostas-webservice"));
-            Bloqueio bloqueio = new Bloqueio(ip, userAgent, cartao);
-            cartao.setStatusCartao(StatusCartao.BLOQUEADO);
-            bloqueioRepository.save(bloqueio);
+        BloqueioResponse res = servicoCartao.bloquearCartao(cartao.getNumeroCartao(), new BloqueioRequest("propostas-webservice"));
+        Bloqueio bloqueio = new Bloqueio(ip, userAgent, cartao);
+        cartao.setStatusCartao(StatusCartao.BLOQUEADO);
+        bloqueioRepository.save(bloqueio);
 
 
     }
 }
+
+

@@ -16,15 +16,31 @@ public class AvisoViagemRequestDto {
     private String destino;
     @NotNull
     @Future
-    private LocalDate terminaEm;
+    private LocalDate validoAte;
 
-    @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-    public AvisoViagemRequestDto(String destino, @JsonFormat(pattern = "dd/MM/yyyy", shape = JsonFormat.Shape.STRING) LocalDate terminaEm) {
+
+    public AvisoViagemRequestDto(String destino, @JsonFormat(pattern = "dd/MM/yyyy", shape = JsonFormat.Shape.STRING) LocalDate validoAte) {
         this.destino = destino;
-        this.terminaEm = terminaEm;
+        this.validoAte = validoAte;
     }
 
     public AvisoViagem converteParaAvisoViagem(String ip, String userAgent, Cartao cartao){
-        return new AvisoViagem(terminaEm, destino, ip, userAgent, cartao);
+        return new AvisoViagem(validoAte, destino, ip, userAgent, cartao);
+    }
+
+    public String getDestino() {
+        return destino;
+    }
+
+    public LocalDate getValidoAte() {
+        return validoAte;
+    }
+
+    public void setDestino(String destino) {
+        this.destino = destino;
+    }
+
+    public void setValidoAte(LocalDate validoAte) {
+        this.validoAte = validoAte;
     }
 }
