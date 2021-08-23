@@ -58,10 +58,6 @@ public class Cartao {
 
 
 
-        if (!response.getCarteiras().isEmpty()) {
-            this.carteiras = response.getCarteiras().stream().map(Carteira::new).collect(Collectors.toSet());
-        }
-
         if (!response.getParcelas().isEmpty()) {
             this.parcelas = response.getParcelas().stream().map(Parcela::new).collect(Collectors.toSet());
         }

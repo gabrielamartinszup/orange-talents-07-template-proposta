@@ -2,9 +2,11 @@ package br.com.zupacademy.gabrielamartins.proposta.service;
 
 import br.com.zupacademy.gabrielamartins.proposta.requestDto.AvisoViagemRequestDto;
 import br.com.zupacademy.gabrielamartins.proposta.requestDto.BloqueioRequest;
+import br.com.zupacademy.gabrielamartins.proposta.requestDto.CarteiraRequestDto;
 import br.com.zupacademy.gabrielamartins.proposta.responseDto.AvisoViagemResponseDto;
 import br.com.zupacademy.gabrielamartins.proposta.responseDto.BloqueioResponse;
 import br.com.zupacademy.gabrielamartins.proposta.responseDto.CartaoResponseDto;
+import br.com.zupacademy.gabrielamartins.proposta.responseDto.CarteiraResponseDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,4 +23,7 @@ public interface ServicoCartao {
 
     @PostMapping("/cartoes/{id}/avisos")
     AvisoViagemResponseDto avisarSobreViagem(@PathVariable String id, @RequestBody @Valid AvisoViagemRequestDto avisoViagemRequestDto);
+
+    @PostMapping("/cartoes/{id}/carteiras")
+    CarteiraResponseDto associarCarteira(@PathVariable String id, @RequestBody @Valid CarteiraRequestDto carteiraRequestDto);
 }

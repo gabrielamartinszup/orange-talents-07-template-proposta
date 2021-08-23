@@ -3,6 +3,9 @@ package br.com.zupacademy.gabrielamartins.proposta.model;
 import br.com.zupacademy.gabrielamartins.proposta.responseDto.CarteiraResponseDto;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -12,10 +15,12 @@ public class Carteira {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String apiId;
+   @NotBlank
+   @Email
     private String email;
-    private LocalDateTime associadoEm;
-    private String emissor;
+    @NotNull
+    @Enumerated(value = EnumType.STRING)
+    private GatewayPagamento carteira;
 
     @ManyToOne
     private Cartao cartao;
@@ -23,11 +28,10 @@ public class Carteira {
     @Deprecated
     public Carteira(){}
 
-    public Carteira(CarteiraResponseDto response) {
-        this.apiId = response.getId();
-        this.email = response.getEmail();
-        this.associadoEm = response.getAssociadoEm();
-        this.emissor = response.getEmissor();
+    public Carteira(String email, GatewayPagamento carteira, Cartao cartao) {
+        this.email = email;
+        this.carteira = carteira;
+        this.cartao = cartao;
     }
 
     @Override

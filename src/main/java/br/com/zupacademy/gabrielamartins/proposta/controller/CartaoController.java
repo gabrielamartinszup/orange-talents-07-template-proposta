@@ -3,22 +3,18 @@ package br.com.zupacademy.gabrielamartins.proposta.controller;
 import br.com.zupacademy.gabrielamartins.proposta.model.Biometria;
 import br.com.zupacademy.gabrielamartins.proposta.model.Bloqueio;
 import br.com.zupacademy.gabrielamartins.proposta.model.Cartao;
-import br.com.zupacademy.gabrielamartins.proposta.model.StatusCartao;
 import br.com.zupacademy.gabrielamartins.proposta.repository.BiometriaRepository;
 import br.com.zupacademy.gabrielamartins.proposta.repository.BloqueioRepository;
 import br.com.zupacademy.gabrielamartins.proposta.repository.CartaoRepository;
 import br.com.zupacademy.gabrielamartins.proposta.requestDto.BiometriaRequest;
-import br.com.zupacademy.gabrielamartins.proposta.requestDto.BloqueioRequest;
-import br.com.zupacademy.gabrielamartins.proposta.responseDto.BloqueioResponse;
 import br.com.zupacademy.gabrielamartins.proposta.service.ServicoCartao;
 import br.com.zupacademy.gabrielamartins.proposta.service.ServicoCartaoSchedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.servlet.http.HttpServletRequest;
+
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Objects;
