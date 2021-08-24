@@ -10,14 +10,16 @@ import br.com.zupacademy.gabrielamartins.proposta.responseDto.ParcelaResponseDto
 import br.com.zupacademy.gabrielamartins.proposta.responseDto.PropostaResponseDto;
 import br.com.zupacademy.gabrielamartins.proposta.service.AnaliseFinanceira;
 import feign.FeignException;
+
+import io.opentracing.Span;
+import io.opentracing.Tracer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.swing.text.html.Option;
-import javax.transaction.Transactional;
+
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -34,10 +36,18 @@ public class PropostaController {
     private AnaliseFinanceira analiseFinanceira;
 
 
+    private final Tracer tracer;
+
+    public PropostaController(Tracer tracer) {
+        this.tracer = tracer;
+    }
 
     @PostMapping
-    @Transactional
     public ResponseEntity<?> criarProposta(@Valid @RequestBody PropostaRequestDto requestDto, UriComponentsBuilder componentsBuilder){
+       Span activeSpan = tracer.activeSpan();
+       activeSpan.setTag("user.email", "gabi@hotmail.com");
+       activeSpan.log("Testando log");
+
 
         Proposta proposta = requestDto.converteParaProposta();
 
@@ -66,6 +76,8 @@ public class PropostaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<PropostaResponseDto> listarPorId(@PathVariable Long id){
+
+        tracer.activeSpan().setBaggageItem("cartao.id", id.toString());
 
         Optional<Proposta> propostaObject = propostaRepository.findById(id);
         if(propostaObject.isPresent()){

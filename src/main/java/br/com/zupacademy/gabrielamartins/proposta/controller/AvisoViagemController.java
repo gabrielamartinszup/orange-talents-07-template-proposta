@@ -29,6 +29,12 @@ public class AvisoViagemController {
     @Autowired
     ServicoCartao servicoCartao;
 
+    public AvisoViagemController(AvisoViagemRepository avisoViagemRepository, CartaoRepository cartaoRepository, ServicoCartao servicoCartao){
+        this.avisoViagemRepository = avisoViagemRepository;
+        this.cartaoRepository = cartaoRepository;
+        this.servicoCartao = servicoCartao;
+    }
+
 
     @PostMapping("/{id}")
     public ResponseEntity<?> cadastrarAvisoViagem(@PathVariable Long id, @RequestBody @Valid AvisoViagemRequestDto request,
