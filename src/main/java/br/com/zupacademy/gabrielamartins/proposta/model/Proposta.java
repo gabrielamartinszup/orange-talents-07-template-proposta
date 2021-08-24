@@ -2,6 +2,7 @@ package br.com.zupacademy.gabrielamartins.proposta.model;
 
 import br.com.zupacademy.gabrielamartins.proposta.repository.PropostaRepository;
 
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -36,10 +37,10 @@ public class Proposta {
     public Proposta() {
     }
 
-    public Proposta(String nome, String email, String documento, Double salario, String endereco) {
+    public Proposta(String nome, String email, DocumentoLimpo documento, Double salario, String endereco) {
         this.nome = nome;
         this.email = email;
-        this.documento = documento;
+        this.documento = documento.hash();
         this.salario = salario;
         this.endereco = endereco;
     }

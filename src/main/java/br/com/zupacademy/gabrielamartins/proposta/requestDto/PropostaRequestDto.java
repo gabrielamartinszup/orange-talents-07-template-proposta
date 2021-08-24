@@ -1,6 +1,7 @@
 package br.com.zupacademy.gabrielamartins.proposta.requestDto;
 
 import br.com.zupacademy.gabrielamartins.proposta.config.validation.CPFouCNPJ;
+import br.com.zupacademy.gabrielamartins.proposta.model.DocumentoLimpo;
 import br.com.zupacademy.gabrielamartins.proposta.model.Proposta;
 
 import javax.validation.constraints.Email;
@@ -41,7 +42,7 @@ public class PropostaRequestDto {
 
     public Proposta converteParaProposta(){
 
-        return new Proposta(nome, email, documento, salario, endereco);
+        return new Proposta(nome, email, new DocumentoLimpo(documento), salario, endereco);
 
     }
 

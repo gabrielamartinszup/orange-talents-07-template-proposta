@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -43,6 +44,7 @@ public class PropostaController {
     }
 
     @PostMapping
+    @Transactional
     public ResponseEntity<?> criarProposta(@Valid @RequestBody PropostaRequestDto requestDto, UriComponentsBuilder componentsBuilder){
        Span activeSpan = tracer.activeSpan();
        activeSpan.setTag("user.email", "gabi@hotmail.com");
